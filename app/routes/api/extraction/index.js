@@ -14,5 +14,6 @@ module.exports = (express, db) => {
             }
         })
     })
+    router.use('/extract', require('./extract')(express, db))
     return router
 }
