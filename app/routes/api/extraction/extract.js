@@ -18,7 +18,8 @@ module.exports = (express, db) => {
                             res.send({error: 'No file selected'})
                         } else {
                             const imageData = req.files.image
-                            const uploadPath = __dirname+'../../../../../public/images/'+imageData.name
+                            // const uploadPath = __dirname+'../../../../../public/images/'+imageData.name
+                            const uploadPath = path.join(__dirname, '/../../../../public/images/', imageData.name)
             
                             imageData.mv(uploadPath, (err) => {
                                 if (err) {
