@@ -11,19 +11,25 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(fileUpload())
 
-mongoClient.connect(db.url, (err,  database) => {
-    if (err) return console.log(`Database Error occurred ${err}`)
 
-    // database.
-    
-    app.use('/api', require('./app/routes/api/index')(express, database.db('text_extraction')))
-    // app.use('/web', require('./app/routes/web/index')(express, database))
-
-    app.get('/', (req, res) => {
-        res.send('<h1>Image Text Extractor Service Api</h1>')
+const connectDatabase = () => {
+    console.log('Connecting to database...')
+    mongoClient.connect(db.url, (err,  database) => {
+        if (err) {
+            connectDatabase()
+            console.log(`Database Error occurred ${err}`)
+            // return ;
+        } else {
+            app.use('/api', require('./app/routes/api/index')(express, database.db('text_extraction')))
+            // app.use('/web', require('./app/routes/web/index')(express, database))
+            
+            app.get('/', (req, res) => {
+                res.send('<h1>Image Text Extractor Service Api</h1>')
+            })
+            
+            app.listen(PORT, () => console.log('Server Is Live'))
+        }
     })
-    
-    app.listen(PORT, () => console.log('Server Is Live'))
+}
 
-    // database.close()
-})
+connectDatabase()
