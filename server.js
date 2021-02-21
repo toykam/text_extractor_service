@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(fileUpload())
 
 mongoClient.connect(db.url, (err,  database) => {
-    if (err) return console.log('Error occurred')
+    if (err) return console.log(`Database Error occurred ${err}`)
 
     // database.
     
