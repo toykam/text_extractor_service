@@ -19,10 +19,9 @@ mongoClient.connect(db.url, (err,  database) => {
     app.use('/api', require('./app/routes/api/index')(express, database.db('text_extraction')))
     // app.use('/web', require('./app/routes/web/index')(express, database))
 
-    // app.get('/hello', (req, res) => {
-    //     console.log('hello')
-    //     res.send('hello')
-    // })
+    app.get('/', (req, res) => {
+        res.send('Image Text Extractor Service')
+    })
     
     app.listen(PORT, () => console.log('Server Is Live'))
 
