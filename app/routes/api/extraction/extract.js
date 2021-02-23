@@ -88,6 +88,8 @@ module.exports = (express, db) => {
                                         }
                                     })
                                 })
+                            } else {
+                                res.send({error: 'No image found selected'})
                             }
             
                         }
