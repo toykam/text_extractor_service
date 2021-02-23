@@ -26,6 +26,10 @@ const connectDatabase = () => {
             app.get('/', (req, res) => {
                 res.send('<h1>Image Text Extractor Service Api</h1>')
             })
+
+            app.use('/api/user', (req, res, next) => {
+                console.log('user endpoint hit')
+            })
             
             app.listen(PORT, () => console.log('Server Is Live'))
         }

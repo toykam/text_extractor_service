@@ -5,5 +5,6 @@ module.exports = (express, db) => {
     })
     router.use('/user', require('./user/index')(express, db))
     router.use('/extractor', require('./extraction/index')(express, db))
+    router.use('/app', require('./app/index')(express, db))
     return router
 }
