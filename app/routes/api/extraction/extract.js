@@ -10,7 +10,7 @@ module.exports = (express, db) => {
         // console.log(req.body)
         try {
             db.collection('langs').find({}).toArray((error, supportedLangs) => {
-                console.log(supportedLangs);
+                // console.log(supportedLangs);
                 // res.send(supportedLangs.map((lang) => lang['key']))
                 if (error) {
                     res.send({status: 0, message: `An error occurred, Please try again later ${error}`})
@@ -22,10 +22,10 @@ module.exports = (express, db) => {
                             res.send({status: 0, message: 'No file selected'})
                         } else {
                             var extractedTexts = []
-                            console.log(`Supported language keys: ${supportedLangs.map((lang) => lang['key'])}`)
+                            // console.log(`Supported language keys: ${supportedLangs.map((lang) => lang['key'])}`)
                             const images = req.files['images'] || req.files['images[]']
-                            console.log(req.files)
-                            console.log(images)
+                            console.log(`Request File: ${req.files}`)
+                            // console.log(images)
                             // const uploadPath = __dirname+'../../../../../public/images/'+images.name
                             if (images) {
                                 if (Array.isArray(images)) {
