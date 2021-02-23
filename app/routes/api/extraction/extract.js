@@ -13,13 +13,13 @@ module.exports = (express, db) => {
                 console.log(supportedLangs);
                 // res.send(supportedLangs.map((lang) => lang['key']))
                 if (error) {
-                    res.send({error: `An error occurred, Please try again later ${error}`})
+                    res.send({status: 0, message: `An error occurred, Please try again later ${error}`})
                 } else {
                     if (supportedLangs.map((lang) => lang['key']).indexOf(req.params.lang) < 0) {
-                        res.send({error: 'The select language is not supported'})
+                        res.send({status: 0, message: 'The select language is not supported'})
                     } else {
                         if (!req.files) {
-                            res.send({error: 'No file selected'})
+                            res.send({status: 0, message: 'No file selected'})
                         } else {
                             var extractedTexts = []
                             console.log(`Supported language keys: ${supportedLangs.map((lang) => lang['key'])}`)
@@ -33,7 +33,7 @@ module.exports = (express, db) => {
                     
                                     image.mv(uploadPath, async (err) => {
                                         if (err) {
-                                            res.send({error: `An error occurred, while moving file: ${err}`})
+                                            res.send({status: 0, message: `An error occurred, while moving file: ${err}`})
                                             // break;
                                         } else {
                                             
@@ -54,7 +54,7 @@ module.exports = (express, db) => {
                                             
                                             if (extractedTexts.length == images.length) {
                                                 console.log('Extraction done...')
-                                                res.send(extractedTexts)
+                                                res.send({status: 1, data:extractedTexts})
                                             }
                                             
                                             // const worker = createWorker({
@@ -89,7 +89,7 @@ module.exports = (express, db) => {
                                     })
                                 })
                             } else {
-                                res.send({error: 'No image found selected'})
+                                res.send({status: 0, message: 'No image found selected'})
                             }
             
                         }
@@ -97,7 +97,7 @@ module.exports = (express, db) => {
                 }
             })
         } catch (error) {
-            res.send({error:`An error occurred, while extracting text, please try again after some time: ${error}`})
+            res.send({status: 0, message:`An error occurred, while extracting text, please try again after some time: ${error}`})
         }
     })
     return router
