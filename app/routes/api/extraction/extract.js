@@ -41,7 +41,7 @@ module.exports = (express, db) => {
                                             languages: supportedLangs.map((lang) => lang['key'])         // languages to load
                                         });
                                         
-                                        const text = await worker.recognize(uploadPath, 'eng');
+                                        const text = await worker.recognize(uploadPath, req.params.lang);
                                         console.log(text)
                                         extractedTexts.push({
                                             name: image.name, text
