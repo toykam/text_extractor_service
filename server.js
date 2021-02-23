@@ -28,7 +28,18 @@ const connectDatabase = () => {
             })
 
             app.use('/api/user', (req, res, next) => {
-                console.log('user endpoint hit')
+                console.log('user endpoint got hit')
+                next()
+            })
+
+            app.use('/api', (req, res, next) => {
+                console.log('api endpoint got hit')
+                next()
+            })
+
+            app.use('/api/extractor', (req, res, next) => {
+                console.log('extractor endpoint got hit')
+                next()
             })
             
             app.listen(PORT, () => console.log('Server Is Live'))
