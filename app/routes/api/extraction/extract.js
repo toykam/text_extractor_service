@@ -24,6 +24,7 @@ module.exports = (express, db) => {
                             var extractedTexts = []
                             console.log(`Supported language keys: ${supportedLangs.map((lang) => lang['key'])}`)
                             const images = req.files.images
+                            console.log(req.files)
                             console.log(images)
                             // const uploadPath = __dirname+'../../../../../public/images/'+images.name
                             if (images) {
