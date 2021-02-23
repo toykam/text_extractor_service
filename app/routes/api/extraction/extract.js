@@ -28,7 +28,7 @@ module.exports = (express, db) => {
                             console.log(images)
                             // const uploadPath = __dirname+'../../../../../public/images/'+images.name
                             if (images) {
-                                images.forEach(async (image, index) => {
+                                images.forEach(async (image) => {
                                     const uploadPath = path.join(__dirname, '/../../../../public/images/', image.name)
                     
                                     image.mv(uploadPath, async (err) => {
