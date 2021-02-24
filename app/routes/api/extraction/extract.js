@@ -34,35 +34,38 @@ module.exports = (express, db) => {
                                     languages: supportedLangs.map((lang) => lang['key'])         // languages to load
                                 });
                                 if (Array.isArray(images)) {
-                                    images.forEach(async (image) => {
-                                        const uploadPath = path.join(__dirname, '/../../../../public/images/', image.name)
-                        
-                                        image.mv(uploadPath, async (err) => {
-                                            if (err) {
-                                                res.send({status: 0, message: `An error occurred, while moving file: ${err}`})
-                                                // break;
-                                            } else {
-                                                const text = await worker.recognize(uploadPath, req.params.lang);
-                                                console.log(text)
-                                                extractedTexts.push({
-                                                    name: image.name, text
-                                                });
-                                                fs.unlink(uploadPath, (error) => {
-                                                    if (error) console.log(`File Delete Error ${error}`)
-                                                    console.log("File deleted")
-                                                })
-                                                
-                                                if (extractedTexts.length == images.length) {
+                                    if (images.length > 3) {
+                                        res.send({status: 0, message: `Image must not be more than 3`})
+                                    } else {
+                                        images.forEach(async (image) => {
+                                            const uploadPath = path.join(__dirname, '/../../../../public/images/', image.name)
+                            
+                                            image.mv(uploadPath, async (err) => {
+                                                if (err) {
+                                                    res.send({status: 0, message: `An error occurred, while moving file: ${err}`})
+                                                    // break;
+                                                } else {
+                                                    const text = await worker.recognize(uploadPath, req.params.lang);
+                                                    console.log(text)
+                                                    extractedTexts.push({
+                                                        name: image.name, text
+                                                    });
+                                                    fs.unlink(uploadPath, (error) => {
+                                                        if (error) console.log(`File Delete Error ${error}`)
+                                                        console.log("File deleted")
+                                                    })
                                                     
-                                                    console.log('Extraction done...')
-                                                    res.send({status: 1, data:extractedTexts})
+                                                    if (extractedTexts.length == images.length) {
+                                                        
+                                                        console.log('Extraction done...')
+                                                        res.send({status: 1, data:extractedTexts})
+                                                    }
                                                 }
-                                            }
+                                            })
                                         })
-                                    })
+                                    }
                                 } else {
                                     const uploadPath = path.join(__dirname, '/../../../../public/images/', images.name)
-                        
                                     images.mv(uploadPath, async (err) => {
                                         if (err) {
                                             res.send({status: 0, message: `An error occurred, while moving file: ${err}`})
