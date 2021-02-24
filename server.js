@@ -16,6 +16,7 @@ const connectDatabase = () => {
     console.log('Connecting to database...')
     mongoClient.connect(db.url, (err,  database) => {
         if (err) {
+            setTimeout(() => connectDatabase(), 10000)
             connectDatabase()
             console.log(`Database Error occurred ${err}`)
             // return ;

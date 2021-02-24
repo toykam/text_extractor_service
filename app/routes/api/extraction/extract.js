@@ -9,7 +9,7 @@ module.exports = (express, db) => {
     router.post('/:lang', async (req, res) => {
         // console.log(req.body)
         try {
-            db.collection('langs').find({}).toArray((error, supportedLangs) => {
+            db.collection('langs').find({}).toArray(async (error, supportedLangs) => {
                 // console.log(supportedLangs);
                 // res.send(supportedLangs.map((lang) => lang['key']))
                 if (error) {
@@ -29,6 +29,10 @@ module.exports = (express, db) => {
                             // console.log(images)
                             // const uploadPath = __dirname+'../../../../../public/images/'+images.name
                             if (images) {
+                                const worker = await createWorker({
+                                    tessdata: path.join(__dirname, './lang-data'),    // where .traineddata-files are located
+                                    languages: supportedLangs.map((lang) => lang['key'])         // languages to load
+                                });
                                 if (Array.isArray(images)) {
                                     images.forEach(async (image) => {
                                         const uploadPath = path.join(__dirname, '/../../../../public/images/', image.name)
@@ -38,12 +42,6 @@ module.exports = (express, db) => {
                                                 res.send({status: 0, message: `An error occurred, while moving file: ${err}`})
                                                 // break;
                                             } else {
-                                                
-                                                const worker = await createWorker({
-                                                    tessdata: path.join(__dirname, './lang-data'),    // where .traineddata-files are located
-                                                    languages: supportedLangs.map((lang) => lang['key'])         // languages to load
-                                                });
-                                                
                                                 const text = await worker.recognize(uploadPath, req.params.lang);
                                                 console.log(text)
                                                 extractedTexts.push({
@@ -55,6 +53,7 @@ module.exports = (express, db) => {
                                                 })
                                                 
                                                 if (extractedTexts.length == images.length) {
+                                                    
                                                     console.log('Extraction done...')
                                                     res.send({status: 1, data:extractedTexts})
                                                 }
@@ -86,9 +85,6 @@ module.exports = (express, db) => {
                                             })
                                             console.log('Extraction done...')
                                             res.send({status: 1, data:extractedTexts})
-                                            
-                                            // if (extractedTexts.length == images.length) {
-                                            // }
                                         }
                                     })
                                 }
